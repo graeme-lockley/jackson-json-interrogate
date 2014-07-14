@@ -1,4 +1,4 @@
-package za.co.no9.util;
+package za.co.no9.util.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Before;
@@ -7,16 +7,16 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class JsonUtilTest {
+public class ObjectDSLTest {
     public static final int DEFAULT_INT = 9987;
 
     public JsonNode JSON;
-    public JsonUtil jsonNode;
+    public ObjectDSL jsonNode;
 
     @Before
     public void setup() throws Exception {
-        JSON = JsonUtil.parse("{\"name\": \"Bob\", \"status\": {\"id\": 1, \"progress\": 12.3}}");
-        jsonNode = JsonUtil.from(JSON);
+        JSON = ObjectDSL.parse("{\"name\": \"Bob\", \"status\": {\"id\": 1, \"progress\": 12.3}}");
+        jsonNode = ObjectDSL.from(JSON);
     }
 
     @Test

@@ -1,17 +1,18 @@
-package za.co.no9.util;
+package za.co.no9.util.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import za.co.no9.util.Optional;
 import za.co.no9.util.function.Function;
 import za.co.no9.util.stream.Stream;
 
 import java.io.IOException;
 
-public class JsonUtil {
+public class ObjectDSL {
     private final JsonNode json;
 
-    public JsonUtil(JsonNode json) {
+    public ObjectDSL(JsonNode json) {
         this.json = json;
     }
 
@@ -20,8 +21,8 @@ public class JsonUtil {
         return mapper.readTree(jsonString);
     }
 
-    public static JsonUtil from(JsonNode json) {
-        return new JsonUtil(json);
+    public static ObjectDSL from(JsonNode json) {
+        return new ObjectDSL(json);
     }
 
     public FieldDSL field(String name) {
@@ -127,11 +128,11 @@ public class JsonUtil {
         }
 
         @Override
-        public Stream<JsonUtil> asStream() {
-            return Stream.create(json.elements()).map(new Function<JsonNode, JsonUtil>() {
+        public Stream<ObjectDSL> asStream() {
+            return Stream.create(json.elements()).map(new Function<JsonNode, ObjectDSL>() {
                 @Override
-                public JsonUtil apply(JsonNode jsonNode) {
-                    return new JsonUtil(jsonNode);
+                public ObjectDSL apply(JsonNode jsonNode) {
+                    return new ObjectDSL(jsonNode);
                 }
             });
         }
@@ -199,7 +200,7 @@ public class JsonUtil {
         }
 
         @Override
-        public Stream<JsonUtil> asStream() {
+        public Stream<ObjectDSL> asStream() {
             return this.throwNullPointerException();
         }
     }

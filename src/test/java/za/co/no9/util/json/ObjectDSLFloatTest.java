@@ -1,4 +1,4 @@
-package za.co.no9.util;
+package za.co.no9.util.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Before;
@@ -7,17 +7,17 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class JsonUtilFloatTest {
+public class ObjectDSLFloatTest {
     public static final float DEFAULT_FLOAT = (float) 83671.23;
     public static final float FLOAT_DELTA = (float) 0.0001;
 
     public JsonNode JSON;
-    public JsonUtil jsonNode;
+    public ObjectDSL jsonNode;
 
     @Before
     public void setup() throws Exception {
-        JSON = JsonUtil.parse("{\"name\": \"Bob\", \"status\": {\"id\": 1, \"progress\": 12.3}}");
-        jsonNode = JsonUtil.from(JSON);
+        JSON = ObjectDSL.parse("{\"name\": \"Bob\", \"status\": {\"id\": 1, \"progress\": 12.3}}");
+        jsonNode = ObjectDSL.from(JSON);
     }
 
     @Test
