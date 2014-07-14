@@ -9,8 +9,6 @@ import static org.junit.Assert.assertTrue;
 
 public class JsonUtilTest {
     public static final int DEFAULT_INT = 9987;
-    public static final float DEFAULT_FLOAT = (float) 83671.23;
-    public static final float FLOAT_DELTA = (float) 0.0001;
 
     public JsonNode JSON;
     public JsonUtil jsonNode;

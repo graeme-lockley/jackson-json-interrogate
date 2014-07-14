@@ -1,5 +1,7 @@
 package za.co.no9.util;
 
+import za.co.no9.util.stream.Stream;
+
 public interface FieldDSL {
     String asString();
 
@@ -20,4 +22,6 @@ public interface FieldDSL {
     float asFloat(float defaultFloat);
 
     Optional<Float> asOptFloat(float defaultFloat);
+
+    Stream<JsonUtil> asStream();
 }

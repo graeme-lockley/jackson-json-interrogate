@@ -3,6 +3,8 @@ package za.co.no9.util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
+import za.co.no9.util.function.Function;
+import za.co.no9.util.stream.Stream;
 
 import java.io.IOException;
 
@@ -51,11 +53,13 @@ public class JsonUtil {
 
     public static class ValueDSL implements FieldDSL {
         protected final JsonNode json;
-        protected final String fieldName;
 
         public ValueDSL(JsonNode json, String fieldName) {
+            this.json = json.get(fieldName);
+        }
+
+        public ValueDSL(JsonNode json) {
             this.json = json;
-            this.fieldName = fieldName;
         }
 
         public String asString() {
@@ -63,9 +67,7 @@ public class JsonUtil {
         }
 
         public Optional<String> asOptString() {
-            JsonNode value = json.findValue(fieldName);
-
-            return value == null ? Optional.<String>empty() : Optional.of(value.asText());
+            return json == null ? Optional.<String>empty() : Optional.of(json.asText());
         }
 
         @Override
@@ -75,9 +77,7 @@ public class JsonUtil {
 
         @Override
         public Optional<Integer> asOptInt() {
-            JsonNode value = json.findValue(fieldName);
-
-            return value == null ? Optional.<Integer>empty() : Optional.of(new Integer(value.asText()));
+            return json == null ? Optional.<Integer>empty() : Optional.of(new Integer(json.asText()));
         }
 
         @Override
@@ -105,9 +105,7 @@ public class JsonUtil {
 
         @Override
         public Optional<Float> asOptFloat() {
-            JsonNode value = json.findValue(fieldName);
-
-            return value == null ? Optional.<Float>empty() : Optional.of(new Float(value.asText()));
+            return json == null ? Optional.<Float>empty() : Optional.of(new Float(json.asText()));
         }
 
         @Override
@@ -126,6 +124,16 @@ public class JsonUtil {
             } catch (IllegalArgumentException ignored) {
                 return Optional.of(defaultFloat);
             }
+        }
+
+        @Override
+        public Stream<JsonUtil> asStream() {
+            return Stream.create(json.elements()).map(new Function<JsonNode, JsonUtil>() {
+                @Override
+                public JsonUtil apply(JsonNode jsonNode) {
+                    return new JsonUtil(jsonNode);
+                }
+            });
         }
     }
 
@@ -188,6 +196,11 @@ public class JsonUtil {
         @Override
         public Optional<Float> asOptFloat(float defaultFloat) {
             return Optional.empty();
+        }
+
+        @Override
+        public Stream<JsonUtil> asStream() {
+            return this.throwNullPointerException();
         }
     }
 }
