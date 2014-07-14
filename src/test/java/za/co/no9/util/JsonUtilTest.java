@@ -1,0 +1,128 @@
+package za.co.no9.util;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class JsonUtilTest {
+    public static final int DEFAULT_INT = 9987;
+    public static final float DEFAULT_FLOAT = (float) 83671.23;
+    public static final float FLOAT_DELTA = (float) 0.0001;
+
+    public JsonNode JSON;
+    public JsonUtil jsonNode;
+
+    @Before
+    public void setup() throws Exception {
+        JSON = JsonUtil.parse("{\"name\": \"Bob\", \"status\": {\"id\": 1, \"progress\": 12.3}}");
+        jsonNode = JsonUtil.from(JSON);
+    }
+
+    @Test
+    public void should_extract_name() throws Exception {
+        assertEquals("Bob", jsonNode.field("name").asString());
+    }
+
+    @Test
+    public void should_return_an_empty_optional_when_field_not_found_for_asOptString() throws Exception {
+        assertTrue(jsonNode.field("title").asOptString().isNotPresent());
+    }
+
+    @Test
+    public void should_return_an_empty_optional_when_nested_interior_field_not_found_for_asOptString() throws Exception {
+        assertTrue(jsonNode.field("title.id").asOptString().isNotPresent());
+    }
+
+    @Test
+    public void should_return_an_empty_optional_when_nested_final_field_not_found_for_asOptString() throws Exception {
+        assertTrue(jsonNode.field("status.name").asOptString().isNotPresent());
+    }
+
+    @Test
+    public void should_return_an_empty_optional_when_nested_interior_field_not_found_for_asOptInt_even_when_a_default_is_passed() throws Exception {
+        assertTrue(jsonNode.field("status.name").asOptInt(DEFAULT_INT).isNotPresent());
+    }
+
+    @Test
+    public void should_return_an_empty_optional_when_nested_final_field_not_found_for_asOptInt_even_when_a_default_is_passed() throws Exception {
+        assertTrue(jsonNode.field("status.name").asOptInt(DEFAULT_INT).isNotPresent());
+    }
+
+    @Test(expected = java.lang.NullPointerException.class)
+    public void should_throw_null_pointer_exception_when_field_not_found_for_asString() throws Exception {
+        jsonNode.field("title").asString();
+    }
+
+    @Test(expected = java.lang.NullPointerException.class)
+    public void should_throw_null_pointer_exception_when_nested_field_not_found_for_asString() throws Exception {
+        jsonNode.field("status.xxx").asString();
+    }
+
+    @Test
+    public void should_extract_nested_id() throws Exception {
+        assertEquals("1", jsonNode.field("status.id").asString());
+    }
+
+    @Test
+    public void should_extract_int() throws Exception {
+        assertEquals(1, jsonNode.field("status.id").asInt());
+    }
+
+    @Test
+    public void should_return_default_when_int_field_does_not_exist() throws Exception {
+        assertEquals(DEFAULT_INT, jsonNode.field("status.xxx").asInt(DEFAULT_INT));
+    }
+
+    @Test
+    public void should_return_default_when_int_field_format_is_incorrect() throws Exception {
+        assertEquals(DEFAULT_INT, jsonNode.field("name").asInt(DEFAULT_INT));
+    }
+
+    @Test
+    public void should_return_default_when_opt_int_field_format_is_incorrect() throws Exception {
+        assertEquals(DEFAULT_INT, (long) jsonNode.field("name").asOptInt(DEFAULT_INT).get());
+    }
+
+    @Test(expected = java.lang.IllegalArgumentException.class)
+    public void should_throw_IllegalArgumentException_for_get_invalid_int() throws Exception {
+        jsonNode.field("name").asInt();
+    }
+
+    @Test
+    public void should_extract_opt_int() throws Exception {
+        assertEquals(new Integer(1), jsonNode.field("status.id").asOptInt().get());
+    }
+
+    @Test
+    public void should_extract_float() throws Exception {
+        assertEquals(12.3, jsonNode.field("status.progress").asFloat(), FLOAT_DELTA);
+    }
+
+    @Test
+    public void should_extract_opt_float() throws Exception {
+        assertEquals(12.3, jsonNode.field("status.progress").asOptFloat().get(), FLOAT_DELTA);
+    }
+
+    @Test
+    public void should_return_empty_for_unknown_opt_float() throws Exception {
+        assertTrue(jsonNode.field("status.unknown.float").asOptFloat().isNotPresent());
+    }
+
+    @Test(expected = java.lang.IllegalArgumentException.class)
+    public void should_throw_exception_for_illegal_float() throws Exception {
+        jsonNode.field("name").asOptFloat().get();
+    }
+
+    @Test
+    public void should_return_default_for_illegal_opt_float() throws Exception {
+        assertEquals(DEFAULT_FLOAT, jsonNode.field("name").asOptFloat(DEFAULT_FLOAT).get(), FLOAT_DELTA);
+    }
+
+    @Test
+    public void should_return_default_for_illegal_float() throws Exception {
+        assertEquals(DEFAULT_FLOAT, jsonNode.field("name").asFloat(DEFAULT_FLOAT), FLOAT_DELTA);
+    }
+}
