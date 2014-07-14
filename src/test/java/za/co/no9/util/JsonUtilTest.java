@@ -95,34 +95,4 @@ public class JsonUtilTest {
     public void should_extract_opt_int() throws Exception {
         assertEquals(new Integer(1), jsonNode.field("status.id").asOptInt().get());
     }
-
-    @Test
-    public void should_extract_float() throws Exception {
-        assertEquals(12.3, jsonNode.field("status.progress").asFloat(), FLOAT_DELTA);
-    }
-
-    @Test
-    public void should_extract_opt_float() throws Exception {
-        assertEquals(12.3, jsonNode.field("status.progress").asOptFloat().get(), FLOAT_DELTA);
-    }
-
-    @Test
-    public void should_return_empty_for_unknown_opt_float() throws Exception {
-        assertTrue(jsonNode.field("status.unknown.float").asOptFloat().isNotPresent());
-    }
-
-    @Test(expected = java.lang.IllegalArgumentException.class)
-    public void should_throw_exception_for_illegal_float() throws Exception {
-        jsonNode.field("name").asOptFloat().get();
-    }
-
-    @Test
-    public void should_return_default_for_illegal_opt_float() throws Exception {
-        assertEquals(DEFAULT_FLOAT, jsonNode.field("name").asOptFloat(DEFAULT_FLOAT).get(), FLOAT_DELTA);
-    }
-
-    @Test
-    public void should_return_default_for_illegal_float() throws Exception {
-        assertEquals(DEFAULT_FLOAT, jsonNode.field("name").asFloat(DEFAULT_FLOAT), FLOAT_DELTA);
-    }
 }
