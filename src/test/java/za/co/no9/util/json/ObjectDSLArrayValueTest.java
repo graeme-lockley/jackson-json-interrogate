@@ -7,27 +7,27 @@ import za.co.no9.lang.Predicate;
 
 import static org.junit.Assert.assertEquals;
 
-public class ObjectDSLArrayTest {
+public class ObjectDSLArrayValueTest {
     public JsonNode JSON;
     public ObjectDSL jsonNode;
 
     @Before
     public void setup() throws Exception {
-        JSON = ObjectDSL.parse("{\"name\": \"Bob\", \"children\": [{\"name\": \"Anne\", \"height\": 1.4}, {\"name\": \"John\", \"height\": 0.9}]}");
+        JSON = ObjectDSL.parse("{\"name\": \"Bob\", \"children\": [0.9, 1.0, 1.1, 1.2]}");
         jsonNode = ObjectDSL.from(JSON);
     }
 
     @Test
-    public void should_count_2_children() {
-        assertEquals(2, jsonNode.field("children").asStream().count());
+    public void should_count_4_children() {
+        assertEquals(4, jsonNode.field("children").asValueStream().count());
     }
 
     @Test
     public void should_filter_children_who_are_taller_than_1_metre() {
-        assertEquals(1, jsonNode.field("children").asStream().filter(new Predicate<ObjectDSL>() {
+        assertEquals(2, jsonNode.field("children").asValueStream().filter(new Predicate<FieldDSL>() {
             @Override
-            public boolean test(ObjectDSL fieldDSL) {
-                return fieldDSL.field("height").asFloat() > 1.0;
+            public boolean test(FieldDSL fieldDSL) {
+                return fieldDSL.asFloat() > 1.0;
             }
         }).count());
     }

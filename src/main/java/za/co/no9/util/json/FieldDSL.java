@@ -25,4 +25,6 @@ public interface FieldDSL {
     Optional<Float> asOptFloat(float defaultFloat);
 
     Stream<ObjectDSL> asStream();
+
+    Stream<FieldDSL> asValueStream();
 }

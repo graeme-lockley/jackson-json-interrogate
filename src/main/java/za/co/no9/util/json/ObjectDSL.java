@@ -136,6 +136,16 @@ public class ObjectDSL {
                 }
             });
         }
+
+        @Override
+        public Stream<FieldDSL> asValueStream() {
+            return Stream.create(json.elements()).map(new Function<JsonNode, FieldDSL>() {
+                @Override
+                public FieldDSL apply(JsonNode jsonNode) {
+                    return new ValueDSL(jsonNode);
+                }
+            });
+        }
     }
 
     public static class EmptyDSL implements FieldDSL {
@@ -201,6 +211,11 @@ public class ObjectDSL {
 
         @Override
         public Stream<ObjectDSL> asStream() {
+            return this.throwNullPointerException();
+        }
+
+        @Override
+        public Stream<FieldDSL> asValueStream() {
             return this.throwNullPointerException();
         }
     }
