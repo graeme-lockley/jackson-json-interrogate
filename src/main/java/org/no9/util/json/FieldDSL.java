@@ -1,7 +1,7 @@
-package za.co.no9.util.json;
+package org.no9.util.json;
 
-import za.co.no9.util.Optional;
-import za.co.no9.util.stream.Stream;
+import org.no9.util.Optional;
+import org.no9.util.stream.Stream;
 
 public interface FieldDSL {
     String asString();

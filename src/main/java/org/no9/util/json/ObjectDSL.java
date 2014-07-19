@@ -1,15 +1,15 @@
-package za.co.no9.util.json;
+package org.no9.util.json;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
-import za.co.no9.util.Optional;
-import za.co.no9.util.function.Function;
-import za.co.no9.util.stream.Stream;
+import org.no9.util.Optional;
+import org.no9.util.function.Function;
+import org.no9.util.stream.Stream;
 
 import java.io.IOException;
 
-public class ObjectDSL {
+public class Making ObjectDSL {
     private final JsonNode json;
 
     public ObjectDSL(JsonNode json) {
