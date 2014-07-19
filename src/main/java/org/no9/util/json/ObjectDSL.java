@@ -9,7 +9,7 @@ import org.no9.util.stream.Stream;
 
 import java.io.IOException;
 
-public class Making ObjectDSL {
+public class ObjectDSL {
     private final JsonNode json;
 
     public ObjectDSL(JsonNode json) {
